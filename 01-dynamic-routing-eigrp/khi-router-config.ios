@@ -1,0 +1,58 @@
+! ==============================================================================
+! Device: Router KHI (Karachi Hub Gateway)
+! Role: Core Hub Router / EIGRP AS 7 Dynamic Routing (DCE Provider)
+! Platform: Cisco 2811 (IOS 15.1)
+! ==============================================================================
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname KHI
+!
+no ip domain-lookup
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ description LAN_3_Management_Hosts
+ ip address 200.100.100.101 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN_4_Operations_Hosts
+ ip address 200.100.101.101 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface Serial0/0/0
+ description WAN_Point_to_Point_Link_to_LHR
+ ip address 1.1.1.2 255.0.0.0
+ clock rate 2000000
+ no shutdown
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 7
+ network 1.0.0.0
+ network 200.100.100.0
+ network 200.100.101.0
+ no auto-summary
+!
+ip classless
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
