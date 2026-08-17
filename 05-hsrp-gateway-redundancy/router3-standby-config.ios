@@ -1,0 +1,57 @@
+! ==============================================================================
+! Device: Router3 (Backup Core Gateway)
+! Roles: 
+!   - HSRP Group 1 Standby Gateway (LAN: 10.1.1.1, Priority 100, Preempt)
+!   - HSRP Group 2 Standby Gateway (WAN: 8.8.8.1, Priority 100, Preempt)
+! Platform: Cisco 2911 (IOS 15.1)
+! ==============================================================================
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname Router3
+!
+no ip domain-lookup
+ip cef
+spanning-tree mode pvst
+!
+interface GigabitEthernet0/0
+ description LAN_Gateway_Segment_to_Switch0
+ ip address 10.1.1.252 255.255.255.0
+ duplex auto
+ speed auto
+ standby version 2
+ standby 1 ip 10.1.1.1
+ standby 1 priority 100
+ standby 1 preempt
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description WAN_Gateway_Segment_to_Switch1
+ ip address 8.8.8.252 255.255.255.0
+ duplex auto
+ speed auto
+ standby version 2
+ standby 2 ip 8.8.8.1
+ standby 2 priority 100
+ standby 2 preempt
+ no shutdown
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
