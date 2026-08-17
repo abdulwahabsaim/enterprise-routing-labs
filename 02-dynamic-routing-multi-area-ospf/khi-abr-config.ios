@@ -1,0 +1,56 @@
+! ==============================================================================
+! Device: Router KHI (Karachi Hub Gateway)
+! Role: Area Border Router (ABR) - Connecting Area 0 & Area 1
+! Protocol: OSPFv2 (Process ID 7)
+! Platform: Cisco 2811 (IOS 15.1)
+! ==============================================================================
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname KHI
+!
+no ip domain-lookup
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ description Branch_Area1_LAN_Segment
+ ip address 200.100.100.101 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+!
+interface Serial0/0/0
+ description WAN_Backbone_Transit_to_LHR
+ ip address 1.1.1.2 255.0.0.0
+ clock rate 2000000
+ no shutdown
+!
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 7
+ log-adjacency-changes
+ network 1.1.1.2 0.0.0.0 area 0
+ network 200.100.100.0 0.0.0.255 area 1
+!
+ip classless
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
