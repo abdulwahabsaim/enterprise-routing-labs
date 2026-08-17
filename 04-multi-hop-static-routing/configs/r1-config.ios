@@ -1,0 +1,31 @@
+! ==============================================================================
+! Device: Router 1 (Central Transit Hub) | Platform: Cisco 1841 (IOS 12.4)
+! ==============================================================================
+version 12.4
+hostname Router1
+!
+interface FastEthernet0/0
+ description LAN_Central_Hub
+ ip address 192.168.2.1 255.255.255.0
+ no shutdown
+!
+interface Serial0/1/0
+ description WAN_to_Router0
+ ip address 11.0.0.3 255.0.0.0
+ clock rate 2000000
+ no shutdown
+!
+interface Serial0/1/1
+ description WAN_to_Router2
+ ip address 12.0.0.2 255.0.0.0
+ no shutdown
+!
+ip classless
+ip route 192.168.1.0 255.255.255.0 11.0.0.2
+ip route 192.168.3.0 255.255.255.0 12.0.0.3
+!
+line con 0
+line vty 0 4
+ login
+!
+end
