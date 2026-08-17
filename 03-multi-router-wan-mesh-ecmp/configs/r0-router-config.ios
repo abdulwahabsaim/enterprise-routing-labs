@@ -1,0 +1,46 @@
+version 12.4
+hostname Router0
+!
+interface FastEthernet0/0
+ description LAN_Branch_1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+!
+interface Serial0/0/0
+ description WAN_to_Router4 (16.0.0.0/8)
+ ip address 16.0.0.2 255.0.0.0
+ no shutdown
+!
+interface Serial0/0/1
+ description WAN_to_Router3 (18.0.0.0/8)
+ ip address 18.0.0.2 255.0.0.0
+ no shutdown
+!
+interface Serial0/1/0
+ description WAN_to_Router1 (11.0.0.0/8)
+ ip address 11.0.0.2 255.0.0.0
+ no shutdown
+!
+interface Serial0/1/1
+ description WAN_to_Router2 (13.0.0.0/8)
+ ip address 13.0.0.2 255.0.0.0
+ no shutdown
+!
+router rip
+ network 11.0.0.0
+ network 12.0.0.0
+ network 13.0.0.0
+ network 14.0.0.0
+ network 15.0.0.0
+ network 16.0.0.0
+ network 17.0.0.0
+ network 18.0.0.0
+ network 19.0.0.0
+ network 20.0.0.0
+ network 192.168.1.0
+ network 192.168.2.0
+ network 192.168.3.0
+ network 192.168.4.0
+ network 192.168.5.0
+!
+end
