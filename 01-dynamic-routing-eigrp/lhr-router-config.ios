@@ -1,0 +1,57 @@
+! ==============================================================================
+! Device: Router LHR (Lahore Branch Gateway)
+! Role: Edge Router / EIGRP AS 7 Dynamic Routing
+! Platform: Cisco 2811 (IOS 15.1)
+! ==============================================================================
+version 15.1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+no service password-encryption
+!
+hostname LHR
+!
+no ip domain-lookup
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ description LAN_1_Engineering_Workstations
+ ip address 200.100.51.101 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface FastEthernet0/1
+ description LAN_2_Server_Segment
+ ip address 200.100.50.101 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface Serial0/0/0
+ description WAN_Point_to_Point_Link_to_KHI
+ ip address 1.1.1.1 255.0.0.0
+ no shutdown
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 7
+ network 1.0.0.0
+ network 200.100.50.0
+ network 200.100.51.0
+ no auto-summary
+!
+ip classless
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+!
+end
