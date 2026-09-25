@@ -1,0 +1,26 @@
+hostname R1
+!
+interface Loopback1
+ description ## Router ID / Management Loopback ##
+ ip address 1.1.1.1 255.255.255.255
+ no shutdown
+!
+interface GigabitEthernet0/0
+ description ## Primary Path to R2 (High Bandwidth) ##
+ ip address 10.0.12.1 255.255.255.252
+ no shutdown
+!
+interface FastEthernet1/0
+ description ## Asymmetric Alternate Path to R3 (Lower Bandwidth) ##
+ ip address 10.0.13.1 255.255.255.252
+ no shutdown
+!
+router eigrp 100
+ ! Multiply Successor FD by 2 to inject Feasible Successor into RIB
+ variance 2
+ passive-interface Loopback1
+ network 10.0.0.0
+ network 1.1.1.1 0.0.0.0
+ no auto-summary
+!
+end
