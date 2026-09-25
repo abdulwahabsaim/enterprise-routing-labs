@@ -1,0 +1,21 @@
+hostname R2
+!
+ipv6 unicast-routing
+!
+interface Serial0/0/0
+ description ## Transit from R1 (Link-Local Only) ##
+ ipv6 enable
+ clock rate 64000
+ no shutdown
+!
+interface Serial0/0/1
+ description ## Transit to R3 (Link-Local Only) ##
+ ipv6 enable
+ clock rate 64000
+ no shutdown
+!
+! Pure Link-Local Transit Routing
+ipv6 route 2001:DB8:0:1::/64 Serial0/0/0 FE80::202:4AFF:FE23:E201
+ipv6 route 2001:DB8:0:3::/64 Serial0/0/1 FE80::290:2BFF:FECC:A101 100
+!
+end
