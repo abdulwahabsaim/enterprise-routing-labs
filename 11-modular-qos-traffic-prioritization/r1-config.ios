@@ -1,0 +1,30 @@
+hostname R1
+!
+! 1. Traffic Classification (NBAR)
+class-map match-all HTTPS_MAP
+ match protocol https
+class-map match-all HTTP_MAP
+ match protocol http
+class-map match-all ICMP_MAP
+ match protocol icmp
+!
+! 2. Marking & Queuing Policy (LLQ & CBWFQ)
+policy-map G0/0/0_OUT
+ class HTTPS_MAP
+  priority percent 10
+  set ip dscp af31
+ class HTTP_MAP
+  bandwidth percent 10
+  set ip dscp af32
+ class ICMP_MAP
+  bandwidth percent 5
+  set ip dscp cs2
+!
+! 3. Policy Enforcement on WAN Interface
+interface GigabitEthernet0/0/0
+ description ## WAN Uplink - QoS Applied ##
+ ip address 172.16.0.1 255.255.255.252
+ service-policy output G0/0/0_OUT
+ no shutdown
+!
+end
