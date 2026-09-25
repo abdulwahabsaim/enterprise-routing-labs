@@ -1,0 +1,27 @@
+hostname R1
+!
+! Enable global IPv6 routing for SLAAC and packet forwarding
+ipv6 unicast-routing
+!
+interface GigabitEthernet0/0
+ description ## LAN 1 Gateway (SLAAC Enabled) ##
+ ipv6 address 2001:DB8:0:1::1/64
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description ## Primary WAN to R3 ##
+ ipv6 address 2001:DB8:0:13::1/64
+ no shutdown
+!
+interface Serial0/0/0
+ description ## Backup WAN to R2 (Link-Local Transit Only) ##
+ ipv6 enable
+ no shutdown
+!
+! Primary IPv6 Route via GUA (Default AD 1)
+ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:13::2
+!
+! Floating IPv6 Backup Route (AD 100) via Fully Specified Link-Local Next-Hop
+ipv6 route 2001:DB8:0:3::/64 Serial0/0/0 FE80::20B:BEFF:FED7:4901 100
+!
+end
