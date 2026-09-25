@@ -1,0 +1,24 @@
+hostname R1
+!
+interface GigabitEthernet0/0
+ description ## Outside Interface to ISP (Public) ##
+ ip address 203.0.113.1 255.255.255.252
+ ip nat outside
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description ## Inside Interface to LAN (Private) ##
+ ip address 172.16.0.254 255.255.255.0
+ ip nat inside
+ no shutdown
+!
+! Define the internal "interesting traffic" eligible for NAT
+access-list 1 permit 172.16.0.0 0.0.0.255
+!
+! Enable PAT (NAT Overload) mapping the ACL to the Outside Interface
+ip nat inside source list 1 interface GigabitEthernet0/0 overload
+!
+! Default route to Internet Server
+ip route 0.0.0.0 0.0.0.0 203.0.113.2
+!
+end
