@@ -1,0 +1,17 @@
+hostname R4
+!
+interface GigabitEthernet0/0
+ description ## OSPF Broadcast Backbone to R2 & R5 ##
+ ip address 192.168.245.2 255.255.255.248
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description ## Link to R3 ##
+ ip address 192.168.34.2 255.255.255.252
+ no shutdown
+!
+router ospf 1
+ network 192.168.34.2 0.0.0.0 area 0
+ network 192.168.245.2 0.0.0.0 area 0
+!
+end
