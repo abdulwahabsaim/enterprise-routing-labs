@@ -1,0 +1,31 @@
+hostname SW1
+!
+vlan 10
+ name Engineering
+!
+vlan 30
+ name Management
+!
+interface GigabitEthernet0/1
+ description ## 802.1Q Trunk to SW2 ##
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+!
+interface range FastEthernet0/1-2
+ description ## Access - VLAN 10 ##
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+interface range FastEthernet0/3-4
+ description ## Access - VLAN 30 ##
+ switchport mode access
+ switchport access vlan 30
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+end
