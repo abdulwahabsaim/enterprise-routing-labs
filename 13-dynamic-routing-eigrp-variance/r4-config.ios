@@ -1,0 +1,32 @@
+hostname R4
+!
+interface Loopback1
+ description ## Router ID / Management Loopback ##
+ ip address 4.4.4.4 255.255.255.255
+ no shutdown
+!
+interface FastEthernet1/0
+ description ## Transit Link from R2 ##
+ ip address 10.0.24.2 255.255.255.252
+ no shutdown
+!
+interface FastEthernet2/0
+ description ## Transit Link from R3 ##
+ ip address 10.0.34.2 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet0/0
+ description ## Local Departmental LAN Gateway ##
+ ip address 192.168.4.254 255.255.255.0
+ no shutdown
+!
+router eigrp 100
+ ! Suppress routing protocol advertisements toward user hosts and loopbacks
+ passive-interface GigabitEthernet0/0
+ passive-interface Loopback1
+ network 10.0.0.0
+ network 192.168.4.0
+ network 4.0.0.0
+ no auto-summary
+!
+end
