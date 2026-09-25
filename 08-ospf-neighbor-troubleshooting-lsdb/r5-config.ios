@@ -1,0 +1,19 @@
+hostname R5
+!
+interface GigabitEthernet0/0
+ description ## OSPF Broadcast Backbone to R2 & R4 (Timers Fixed) ##
+ ip address 192.168.245.3 255.255.255.248
+ no shutdown
+!
+interface GigabitEthernet0/0/0
+ description ## WAN Uplink to ISP ##
+ ip address 203.0.113.1 255.255.255.252
+ no shutdown
+!
+router ospf 1
+ network 192.168.245.3 0.0.0.0 area 0
+ default-information originate
+!
+ip route 0.0.0.0 0.0.0.0 203.0.113.2
+!
+end
