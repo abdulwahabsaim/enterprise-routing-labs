@@ -1,0 +1,18 @@
+hostname R1
+!
+interface GigabitEthernet0/0
+ description ## LAN - PC1 Subnet ##
+ ip address 10.0.1.254 255.255.255.0
+ no shutdown
+!
+interface Serial0/0/0
+ description ## P2P Link to R2 ##
+ ip address 192.168.12.1 255.255.255.252
+ clock rate 128000
+ no shutdown
+!
+router ospf 1
+ network 10.0.1.254 0.0.0.0 area 0
+ network 192.168.12.0 0.0.0.3 area 0
+!
+end
