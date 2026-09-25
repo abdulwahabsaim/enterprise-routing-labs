@@ -1,0 +1,61 @@
+hostname SW2
+!
+ip routing
+!
+vlan 10
+ name Engineering
+!
+vlan 20
+ name Sales_HR
+!
+vlan 30
+ name Management
+!
+interface GigabitEthernet1/0/2
+ description ## L3 Point-to-Point Routed Uplink to R1 ##
+ no switchport
+ ip address 10.0.0.193 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet1/0/1
+ description ## 802.1Q Trunk Downlink to SW1 ##
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport nonegotiate
+ no shutdown
+!
+interface GigabitEthernet1/0/3
+ description ## Access - VLAN 20 ##
+ switchport mode access
+ switchport access vlan 20
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+interface range GigabitEthernet1/0/4-5
+ description ## Access - VLAN 10 ##
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast
+ no shutdown
+!
+interface Vlan10
+ description ## SVI Gateway for Engineering ##
+ ip address 10.0.0.62 255.255.255.192
+ no shutdown
+!
+interface Vlan20
+ description ## SVI Gateway for Sales_HR ##
+ ip address 10.0.0.126 255.255.255.192
+ no shutdown
+!
+interface Vlan30
+ description ## SVI Gateway for Management ##
+ ip address 10.0.0.190 255.255.255.192
+ no shutdown
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.0.0.194
+!
+end
