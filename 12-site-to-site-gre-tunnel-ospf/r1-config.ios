@@ -1,0 +1,29 @@
+hostname R1
+!
+interface GigabitEthernet0/0
+ description ## Office A LAN ##
+ ip address 10.0.1.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/0/0
+ description ## ISP Underlay WAN Uplink ##
+ ip address 100.0.0.2 255.255.255.252
+ no shutdown
+!
+interface Tunnel0
+ description ## Site-to-Site GRE Overlay Tunnel ##
+ ip address 192.168.1.1 255.255.255.252
+ mtu 1476
+ tunnel source GigabitEthernet0/0/0
+ tunnel destination 200.0.0.2
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.0.1.0 0.0.0.255 area 0
+ network 192.168.1.1 0.0.0.0 area 0
+ passive-interface GigabitEthernet0/0
+!
+! Default route pointing to ISP
+ip route 0.0.0.0 0.0.0.0 100.0.0.1
+!
+end
